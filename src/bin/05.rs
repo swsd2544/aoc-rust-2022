@@ -30,9 +30,8 @@ pub fn part_one(input: &str) -> Option<String> {
 
     let mut result = String::new();
     stacks.iter().for_each(|st| {
-        match st.last() {
-            Some(c) => result.push(*c),
-            None => ()
+        if let Some(c) = st.last() {
+            result.push(*c)
         }
     });
     Some(result)
@@ -72,9 +71,8 @@ pub fn part_two(input: &str) -> Option<String> {
 
     let mut result = String::new();
     stacks.iter().for_each(|st| {
-        match st.last() {
-            Some(c) => result.push(*c),
-            None => ()
+        if let Some(c) = st.last() {
+            result.push(*c)
         }
     });
     Some(result)
