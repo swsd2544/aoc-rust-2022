@@ -1,21 +1,6 @@
 pub fn part_one(input: &str) -> Option<String> {
     let mut splits = input.splitn(2, "\n\n");
-    let mut stacks = splits.next().unwrap().split('\n').rev();
-
-    let len = stacks.next().unwrap().split_whitespace().count();
-    let mut stacks = stacks.fold(vec![vec![]; len], |mut acc, line| {
-        line
-            .char_indices()
-            .skip(1)
-            .step_by(4)
-            .filter(|(_, c)| {
-                *c != ' '
-            })
-            .for_each(|(i, c)| {
-                acc[i / 4].push(c)
-            });
-        acc
-    });
+    let mut stacks = initialize_stacks(splits.next().unwrap());
 
     splits.next().unwrap().trim().split('\n').for_each(|line| {
         let moves = line.split_whitespace().collect::<Vec<&str>>();
@@ -28,33 +13,12 @@ pub fn part_one(input: &str) -> Option<String> {
         }
     });
 
-    let mut result = String::new();
-    stacks.iter().for_each(|st| {
-        if let Some(c) = st.last() {
-            result.push(*c)
-        }
-    });
-    Some(result)
+    Some(extract_result(&stacks))
 }
 
 pub fn part_two(input: &str) -> Option<String> {
     let mut splits = input.splitn(2, "\n\n");
-    let mut stacks = splits.next().unwrap().split('\n').rev();
-
-    let len = stacks.next().unwrap().split_whitespace().count();
-    let mut stacks = stacks.fold(vec![vec![]; len], |mut acc, line| {
-        line
-            .char_indices()
-            .skip(1)
-            .step_by(4)
-            .filter(|(_, c)| {
-                *c != ' '
-            })
-            .for_each(|(i, c)| {
-                acc[i / 4].push(c)
-            });
-        acc
-    });
+    let mut stacks = initialize_stacks(splits.next().unwrap());
 
     splits.next().unwrap().trim().split('\n').for_each(|line| {
         let moves = line.split_whitespace().collect::<Vec<&str>>();
@@ -69,13 +33,36 @@ pub fn part_two(input: &str) -> Option<String> {
         stacks[from].truncate(len - num);
     });
 
+    Some(extract_result(&stacks))
+}
+
+fn initialize_stacks(input: &str) -> Vec<Vec<char>> {
+    let mut stacks = input.split('\n').rev();
+
+    let len = stacks.next().unwrap().split_whitespace().count();
+    stacks.fold(vec![vec![]; len], |mut acc, line| {
+        line
+            .char_indices()
+            .skip(1)
+            .step_by(4)
+            .filter(|(_, c)| {
+                *c != ' '
+            })
+            .for_each(|(i, c)| {
+                acc[i / 4].push(c)
+            });
+        acc
+    })
+}
+
+fn extract_result(stacks: &[Vec<char>]) -> String {
     let mut result = String::new();
     stacks.iter().for_each(|st| {
         if let Some(c) = st.last() {
             result.push(*c)
         }
     });
-    Some(result)
+    result 
 }
 
 fn main() {
