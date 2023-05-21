@@ -7,27 +7,27 @@ pub fn part_one(input: &str) -> Option<u32> {
                 let elf = decode_elfcode(iter.next().unwrap());
                 let human = decode_humancode(iter.next().unwrap());
                 let adder = match human {
-                    Code::ROCK => 1,
-                    Code::PAPER => 2,
-                    Code::SCISSORS => 3,
+                    Code::Rock => 1,
+                    Code::Paper => 2,
+                    Code::Scissors => 3,
                 };
 
                 adder
                     + match human {
-                        Code::ROCK => match elf {
-                            Code::SCISSORS => MatchOutcome::WIN,
-                            Code::ROCK => MatchOutcome::DRAW,
-                            Code::PAPER => MatchOutcome::LOSE,
+                        Code::Rock => match elf {
+                            Code::Scissors => MatchOutcome::Win,
+                            Code::Rock => MatchOutcome::Draw,
+                            Code::Paper => MatchOutcome::Lose,
                         },
-                        Code::PAPER => match elf {
-                            Code::ROCK => MatchOutcome::WIN,
-                            Code::PAPER => MatchOutcome::DRAW,
-                            Code::SCISSORS => MatchOutcome::LOSE,
+                        Code::Paper => match elf {
+                            Code::Rock => MatchOutcome::Win,
+                            Code::Paper => MatchOutcome::Draw,
+                            Code::Scissors => MatchOutcome::Lose,
                         },
-                        Code::SCISSORS => match elf {
-                            Code::PAPER => MatchOutcome::WIN,
-                            Code::SCISSORS => MatchOutcome::DRAW,
-                            Code::ROCK => MatchOutcome::LOSE,
+                        Code::Scissors => match elf {
+                            Code::Paper => MatchOutcome::Win,
+                            Code::Scissors => MatchOutcome::Draw,
+                            Code::Rock => MatchOutcome::Lose,
                         },
                     }
                     .value()
@@ -43,23 +43,23 @@ pub fn part_two(input: &str) -> Option<u32> {
             .map(|line| {
                 let mut iter = line.split_whitespace();
                 let elf = decode_elfcode(iter.next().unwrap());
-                let human = decode_humanwin(iter.next().unwrap());
+                let human = decode_human_win(iter.next().unwrap());
                 human.value()
                     + match elf {
-                        Code::ROCK => match human {
-                            MatchOutcome::WIN => 2,
-                            MatchOutcome::LOSE => 3,
-                            MatchOutcome::DRAW => 1,
+                        Code::Rock => match human {
+                            MatchOutcome::Win => 2,
+                            MatchOutcome::Lose => 3,
+                            MatchOutcome::Draw => 1,
                         },
-                        Code::PAPER => match human {
-                            MatchOutcome::WIN => 3,
-                            MatchOutcome::LOSE => 1,
-                            MatchOutcome::DRAW => 2,
+                        Code::Paper => match human {
+                            MatchOutcome::Win => 3,
+                            MatchOutcome::Lose => 1,
+                            MatchOutcome::Draw => 2,
                         },
-                        Code::SCISSORS => match human {
-                            MatchOutcome::WIN => 1,
-                            MatchOutcome::LOSE => 2,
-                            MatchOutcome::DRAW => 3,
+                        Code::Scissors => match human {
+                            MatchOutcome::Win => 1,
+                            MatchOutcome::Lose => 2,
+                            MatchOutcome::Draw => 3,
                         },
                     }
             })
@@ -68,50 +68,50 @@ pub fn part_two(input: &str) -> Option<u32> {
 }
 
 enum Code {
-    ROCK,
-    PAPER,
-    SCISSORS,
+    Rock,
+    Paper,
+    Scissors,
 }
 
 enum MatchOutcome {
-    WIN,
-    LOSE,
-    DRAW,
+    Win,
+    Lose,
+    Draw,
 }
 
 impl MatchOutcome {
     fn value(&self) -> u32 {
         match self {
-            MatchOutcome::WIN => 6,
-            MatchOutcome::LOSE => 0,
-            MatchOutcome::DRAW => 3,
+            MatchOutcome::Win => 6,
+            MatchOutcome::Lose => 0,
+            MatchOutcome::Draw => 3,
         }
     }
 }
 
 fn decode_elfcode(input: &str) -> Code {
     match input {
-        "A" => Code::ROCK,
-        "B" => Code::PAPER,
-        "C" => Code::SCISSORS,
+        "A" => Code::Rock,
+        "B" => Code::Paper,
+        "C" => Code::Scissors,
         _ => panic!("Invalid input"),
     }
 }
 
 fn decode_humancode(input: &str) -> Code {
     match input {
-        "X" => Code::ROCK,
-        "Y" => Code::PAPER,
-        "Z" => Code::SCISSORS,
+        "X" => Code::Rock,
+        "Y" => Code::Paper,
+        "Z" => Code::Scissors,
         _ => panic!("Invalid input"),
     }
 }
 
-fn decode_humanwin(input: &str) -> MatchOutcome {
+fn decode_human_win(input: &str) -> MatchOutcome {
     match input {
-        "X" => MatchOutcome::LOSE,
-        "Y" => MatchOutcome::DRAW,
-        "Z" => MatchOutcome::WIN,
+        "X" => MatchOutcome::Lose,
+        "Y" => MatchOutcome::Draw,
+        "Z" => MatchOutcome::Win,
         _ => panic!("Invalid input"),
     }
 }
